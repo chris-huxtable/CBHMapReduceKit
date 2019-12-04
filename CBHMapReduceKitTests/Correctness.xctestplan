@@ -1,0 +1,53 @@
+{
+  "configurations" : [
+    {
+      "id" : "7E6C09FD-E596-430A-BCED-4F02843975AB",
+      "name" : "Behavior",
+      "options" : {
+        "addressSanitizer" : {
+          "detectStackUseAfterReturn" : true,
+          "enabled" : true
+        },
+        "mallocScribbleEnabled" : true,
+        "nsZombieEnabled" : true,
+        "testExecutionOrdering" : "random",
+        "undefinedBehaviorSanitizerEnabled" : true
+      }
+    },
+    {
+      "id" : "C1B83D32-4876-47F5-AEC2-AEB23FCD8B23",
+      "name" : "Threading",
+      "options" : {
+        "testExecutionOrdering" : "random",
+        "threadSanitizerEnabled" : true,
+        "undefinedBehaviorSanitizerEnabled" : true
+      }
+    },
+    {
+      "id" : "0E0A444B-EA1C-4F58-9CD6-BEB0FE2ACD56",
+      "name" : "Memory",
+      "options" : {
+        "guardMallocEnabled" : true,
+        "mallocGuardEdgesEnabled" : true,
+        "mallocStackLoggingOptions" : {
+          "loggingType" : "allAllocations"
+        },
+        "testExecutionOrdering" : "random",
+        "undefinedBehaviorSanitizerEnabled" : true
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:CBHMapReduceKit.xcodeproj",
+        "identifier" : "83E09E392396C7A9003B95B9",
+        "name" : "CBHMapReduceKitTests"
+      }
+    }
+  ],
+  "version" : 1
+}
