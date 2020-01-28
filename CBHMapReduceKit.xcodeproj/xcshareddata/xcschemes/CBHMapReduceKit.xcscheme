@@ -33,9 +33,6 @@
             reference = "container:CBHMapReduceKitTests/Correctness.xctestplan"
             default = "YES">
          </TestPlanReference>
-         <TestPlanReference
-            reference = "container:CBHMapReduceKitTests/Performance.xctestplan">
-         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
