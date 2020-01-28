@@ -23,18 +23,18 @@
 
 #pragma mark - Mapping
 
-- (NSSet *)setByMapping:(id (^)(id object))block
+- (NSSet *)setByMapping:(id (^)(id object))transform
 {
-	return [self mutableSetByMapping:block];
+	return [self mutableSetByMapping:transform];
 }
 
-- (NSMutableSet *)mutableSetByMapping:(id (^)(id object))block
+- (NSMutableSet *)mutableSetByMapping:(id (^)(id object))transform
 {
 	NSMutableSet *resultSet = [[NSMutableSet alloc] initWithCapacity:[self count]];
 
 	for (id object in self)
 	{
-		id mapping = block(object);
+		id mapping = transform(object);
 		if ( mapping ) { [resultSet addObject:mapping]; }
 	}
 
@@ -42,18 +42,18 @@
 }
 
 
-- (NSArray *)arrayByMapping:(id (^)(id object))block
+- (NSArray *)arrayByMapping:(id (^)(id object))transform
 {
-	return [self mutableArrayByMapping:block];
+	return [self mutableArrayByMapping:transform];
 }
 
-- (NSMutableArray *)mutableArrayByMapping:(id (^)(id object))block
+- (NSMutableArray *)mutableArrayByMapping:(id (^)(id object))transform
 {
 	NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:[self count]];
 
 	for (id object in self)
 	{
-		id mapping = block(object);
+		id mapping = transform(object);
 		if ( mapping ) { [result addObject:mapping]; }
 	}
 
@@ -61,18 +61,18 @@
 }
 
 
-- (NSOrderedSet *)orderedSetByMapping:(id (^)(id object))block
+- (NSOrderedSet *)orderedSetByMapping:(id (^)(id object))transform
 {
-	return [self mutableOrderedSetByMapping:block];
+	return [self mutableOrderedSetByMapping:transform];
 }
 
-- (NSMutableOrderedSet *)mutableOrderedSetByMapping:(id (^)(id object))block
+- (NSMutableOrderedSet *)mutableOrderedSetByMapping:(id (^)(id object))transform
 {
 	NSMutableOrderedSet *result = [[NSMutableOrderedSet alloc] initWithCapacity:[self count]];
 
 	for (id object in self)
 	{
-		id mapping = block(object);
+		id mapping = transform(object);
 		if ( mapping ) { [result addObject:mapping]; }
 	}
 
@@ -82,18 +82,18 @@
 
 #pragma mark - Filtering
 
-- (NSSet *)setByFiltering:(BOOL (^)(id object))block
+- (NSSet *)setByFiltering:(BOOL (^)(id object))predicate
 {
-	return [self mutableSetByFiltering:block];
+	return [self mutableSetByFiltering:predicate];
 }
 
-- (NSMutableSet *)mutableSetByFiltering:(BOOL (^)(id object))block
+- (NSMutableSet *)mutableSetByFiltering:(BOOL (^)(id object))predicate
 {
 	NSMutableSet *result = [[NSMutableSet alloc] initWithCapacity:[self count]];
 
 	for (id object in self)
 	{
-		if ( block(object) ) { [result addObject:object]; }
+		if ( predicate(object) ) { [result addObject:object]; }
 	}
 
 	return result;
@@ -102,16 +102,16 @@
 
 #pragma mark - Reducing
 
-- (id)initial:(id)initial reduce:(id (^)(id memo, id object))block
+- (id)initial:(id)initial reduce:(id (^)(id accumulated, id object))reduce
 {
-	id result = initial;
+	id accumulated = initial;
 
 	for (id object in self)
 	{
-		result = block(result, object);
+		accumulated = reduce(accumulated, object);
 	}
 
-	return result;
+	return accumulated;
 }
 
 
@@ -145,12 +145,12 @@
 
 #pragma mark - Filtering
 
-- (NSMutableSet *)filter:(BOOL (^)(id object))block
+- (instancetype)filter:(BOOL (^)(id object))predicate
 {
 	NSMutableSet *removals = [NSMutableSet set];
 
 	[self enumerateObjectsUsingBlock:^(id object, BOOL *stop) {
-		if ( !block(object) ) { [removals addObject:object]; }
+		if ( !predicate(object) ) { [removals addObject:object]; }
 	}];
 
 	[self minusSet:removals];

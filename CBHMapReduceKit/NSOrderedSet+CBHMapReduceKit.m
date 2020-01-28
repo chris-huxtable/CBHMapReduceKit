@@ -82,18 +82,18 @@
 
 #pragma mark - Filtering
 
-- (NSOrderedSet *)orderedSetByFiltering:(BOOL (^)(id object))block
+- (NSOrderedSet *)orderedSetByFiltering:(BOOL (^)(id object))predicate
 {
-	return [self mutableOrderedSetByFiltering:block];
+	return [self mutableOrderedSetByFiltering:predicate];
 }
 
-- (NSMutableOrderedSet *)mutableOrderedSetByFiltering:(BOOL (^)(id object))block
+- (NSMutableOrderedSet *)mutableOrderedSetByFiltering:(BOOL (^)(id object))predicate
 {
 	NSMutableOrderedSet *result = [[NSMutableOrderedSet alloc] initWithCapacity:[self count]];
 
 	for (id object in self)
 	{
-		if ( block(object) ) { [result addObject:object]; }
+		if ( predicate(object) ) { [result addObject:object]; }
 	}
 
 	return result;
@@ -102,13 +102,13 @@
 
 #pragma mark - Reducing
 
-- (id)initial:(id)initial reduce:(id (^)(id memo, id object))block
+- (id)initial:(id)initial reduce:(id (^)(id memo, id object))reduce
 {
 	id result = initial;
 
 	for (id object in self)
 	{
-		result = block(result, object);
+		result = reduce(result, object);
 	}
 
 	return result;
@@ -145,12 +145,12 @@
 
 #pragma mark - Filtering
 
-- (instancetype)filter:(BOOL (^)(id object))block
+- (instancetype)filter:(BOOL (^)(id object))predicate
 {
 	NSMutableIndexSet *removals = [NSMutableIndexSet indexSet];
 
 	[self enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
-		if ( !block(object) ) { [removals addIndex:idx]; }
+		if ( !predicate(object) ) { [removals addIndex:idx]; }
 	}];
 
 	[self removeObjectsAtIndexes:removals];

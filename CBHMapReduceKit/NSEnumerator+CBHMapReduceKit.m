@@ -23,18 +23,18 @@
 
 #pragma mark - Mapping
 
-- (NSArray *)arrayByMapping:(id (^)(id object))block
+- (NSArray *)arrayByMapping:(id (^)(id object))transform
 {
-	return [self mutableArrayByMapping:block];
+	return [self mutableArrayByMapping:transform];
 }
 
-- (NSMutableArray *)mutableArrayByMapping:(id (^)(id object))block
+- (NSMutableArray *)mutableArrayByMapping:(id (^)(id object))transform
 {
 	NSMutableArray *result = [NSMutableArray array];
 
 	for (id object in self)
 	{
-		id mapping = block(object);
+		id mapping = transform(object);
 		if ( mapping ) { [result addObject:mapping]; }
 	}
 
@@ -42,18 +42,18 @@
 }
 
 
-- (NSSet *)setByMapping:(id (^)(id object))block
+- (NSSet *)setByMapping:(id (^)(id object))transform
 {
-	return [self mutableSetByMapping:block];
+	return [self mutableSetByMapping:transform];
 }
 
-- (NSMutableSet *)mutableSetByMapping:(id (^)(id object))block
+- (NSMutableSet *)mutableSetByMapping:(id (^)(id object))transform
 {
 	NSMutableSet *resultSet = [NSMutableSet set];
 
 	for (id object in self)
 	{
-		id mapping = block(object);
+		id mapping = transform(object);
 		if ( mapping ) { [resultSet addObject:mapping]; }
 	}
 
@@ -61,18 +61,18 @@
 }
 
 
-- (NSOrderedSet *)orderedSetByMapping:(id (^)(id object))block
+- (NSOrderedSet *)orderedSetByMapping:(id (^)(id object))transform
 {
-	return [self mutableOrderedSetByMapping:block];
+	return [self mutableOrderedSetByMapping:transform];
 }
 
-- (NSMutableOrderedSet *)mutableOrderedSetByMapping:(id (^)(id object))block
+- (NSMutableOrderedSet *)mutableOrderedSetByMapping:(id (^)(id object))transform
 {
 	NSMutableOrderedSet *result = [NSMutableOrderedSet orderedSet];
 
 	for (id object in self)
 	{
-		id mapping = block(object);
+		id mapping = transform(object);
 		if ( mapping ) { [result addObject:mapping]; }
 	}
 
@@ -82,52 +82,52 @@
 
 #pragma mark - Filtering
 
-- (NSArray *)arrayByFiltering:(BOOL (^)(id object))block
+- (NSArray *)arrayByFiltering:(BOOL (^)(id object))predicate
 {
-	return [self mutableArrayByFiltering:block];
+	return [self mutableArrayByFiltering:predicate];
 }
 
-- (NSMutableArray *)mutableArrayByFiltering:(BOOL (^)(id object))block
+- (NSMutableArray *)mutableArrayByFiltering:(BOOL (^)(id object))predicate
 {
 	NSMutableArray *result = [NSMutableArray array];
 
 	for (id object in self)
 	{
-		if ( block(object) ) { [result addObject:object]; }
+		if ( predicate(object) ) { [result addObject:object]; }
 	}
 
 	return result;
 }
 
-- (NSSet *)setByFiltering:(BOOL (^)(id object))block
+- (NSSet *)setByFiltering:(BOOL (^)(id object))predicate
 {
-	return [self mutableSetByFiltering:block];
+	return [self mutableSetByFiltering:predicate];
 }
 
-- (NSMutableSet *)mutableSetByFiltering:(BOOL (^)(id object))block
+- (NSMutableSet *)mutableSetByFiltering:(BOOL (^)(id object))predicate
 {
 	NSMutableSet *result = [NSMutableSet set];
 
 	for (id object in self)
 	{
-		if ( block(object) ) { [result addObject:object]; }
+		if ( predicate(object) ) { [result addObject:object]; }
 	}
 
 	return result;
 }
 
-- (NSOrderedSet *)orderedSetByFiltering:(BOOL (^)(id object))block
+- (NSOrderedSet *)orderedSetByFiltering:(BOOL (^)(id object))predicate
 {
-	return [self mutableOrderedSetByFiltering:block];
+	return [self mutableOrderedSetByFiltering:predicate];
 }
 
-- (NSMutableOrderedSet *)mutableOrderedSetByFiltering:(BOOL (^)(id object))block
+- (NSMutableOrderedSet *)mutableOrderedSetByFiltering:(BOOL (^)(id object))predicate
 {
 	NSMutableOrderedSet *result = [NSMutableOrderedSet orderedSet];
 
 	for (id object in self)
 	{
-		if ( block(object) ) { [result addObject:object]; }
+		if ( predicate(object) ) { [result addObject:object]; }
 	}
 
 	return result;
@@ -136,16 +136,16 @@
 
 #pragma mark - Reducing
 
-- (id)initial:(id)initial reduce:(id (^)(id memo, id object))block
+- (id)initial:(id)initial reduce:(id (^)(id accumulated, id object))reduce
 {
-	id result = initial;
+	id accumulated = initial;
 
 	for (id object in self)
 	{
-		result = block(result, object);
+		accumulated = reduce(accumulated, object);
 	}
 
-	return result;
+	return accumulated;
 }
 
 @end

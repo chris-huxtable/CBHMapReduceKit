@@ -24,17 +24,17 @@
 
 #pragma mark - Mapping
 
-- (NSDictionary *)dictionaryByMapping:(id (^)(id key, id object))block
+- (NSDictionary *)dictionaryByMapping:(id (^)(id key, id object))transform
 {
-	return [self mutableDictionaryByMapping:block];
+	return [self mutableDictionaryByMapping:transform];
 }
 
-- (NSMutableDictionary *)mutableDictionaryByMapping:(id (^)(id key, id object))block
+- (NSMutableDictionary *)mutableDictionaryByMapping:(id (^)(id key, id object))transform
 {
 	NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:[self count]];
 
 	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-		id mapping = block(key, value);
+		id mapping = transform(key, value);
 		if ( mapping ) { [result setObject:mapping forKey:key]; }
 	}];
 
@@ -42,17 +42,17 @@
 }
 
 
-- (NSArray *)arrayByMapping:(id (^)(id key, id object))block
+- (NSArray *)arrayByMapping:(id (^)(id key, id object))transform
 {
-	return [self mutableArrayByMapping:block];
+	return [self mutableArrayByMapping:transform];
 }
 
-- (NSMutableArray *)mutableArrayByMapping:(id (^)(id key, id object))block
+- (NSMutableArray *)mutableArrayByMapping:(id (^)(id key, id object))transform
 {
 	NSMutableArray *result = [[NSMutableArray alloc] initWithCapacity:[self count]];
 
 	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-		id mapping = block(key, value);
+		id mapping = transform(key, value);
 		if ( mapping ) { [result addObject:mapping]; }
 	}];
 
@@ -60,17 +60,17 @@
 }
 
 
-- (NSSet *)setByMapping:(id (^)(id key, id object))block
+- (NSSet *)setByMapping:(id (^)(id key, id object))transform
 {
-	return [self mutableSetByMapping:block];
+	return [self mutableSetByMapping:transform];
 }
 
-- (NSMutableSet *)mutableSetByMapping:(id (^)(id key, id object))block
+- (NSMutableSet *)mutableSetByMapping:(id (^)(id key, id object))transform
 {
 	NSMutableSet *result = [[NSMutableSet alloc] initWithCapacity:[self count]];
 
 	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-		id mapping = block(key, value);
+		id mapping = transform(key, value);
 		if ( mapping ) { [result addObject:mapping]; }
 	}];
 
@@ -78,17 +78,17 @@
 }
 
 
-- (NSOrderedSet *)orderedSetByMapping:(id (^)(id key, id object))block
+- (NSOrderedSet *)orderedSetByMapping:(id (^)(id key, id object))transform
 {
-	return [self mutableOrderedSetByMapping:block];
+	return [self mutableOrderedSetByMapping:transform];
 }
 
-- (NSMutableOrderedSet *)mutableOrderedSetByMapping:(id (^)(id key, id object))block
+- (NSMutableOrderedSet *)mutableOrderedSetByMapping:(id (^)(id key, id object))transform
 {
 	NSMutableOrderedSet *result = [[NSMutableOrderedSet alloc] initWithCapacity:[self count]];
 
 	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-		id mapping = block(key, value);
+		id mapping = transform(key, value);
 		if ( mapping ) { [result addObject:mapping]; }
 	}];
 
@@ -98,17 +98,17 @@
 
 #pragma mark - Filtering
 
-- (NSDictionary *)dictionaryByFiltering:(BOOL (^)(id key, id object))block
+- (NSDictionary *)dictionaryByFiltering:(BOOL (^)(id key, id object))predicate
 {
-	return [self mutableDictionaryByFiltering:block];
+	return [self mutableDictionaryByFiltering:predicate];
 }
 
-- (NSMutableDictionary *)mutableDictionaryByFiltering:(BOOL (^)(id key, id object))block
+- (NSMutableDictionary *)mutableDictionaryByFiltering:(BOOL (^)(id key, id object))predicate
 {
 	NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithCapacity:[self count]];
 
 	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-		if ( block(key, value) ) { [result setObject:value forKey:key]; }
+		if ( predicate(key, value) ) { [result setObject:value forKey:key]; }
 	}];
 
 	return result;
@@ -117,16 +117,16 @@
 
 #pragma mark - Reducing
 
-- (id)initial:(id)initial reduce:(id (^)(id memo, id object))block
+- (id)initial:(id)initial reduce:(id (^)(id accumulated, id object))reduce
 {
-	id result = initial;
+	id accumulated = initial;
 
 	for (id object in [self objectEnumerator])
 	{
-		result = block(result, object);
+		accumulated = reduce(accumulated, object);
 	}
 
-	return result;
+	return accumulated;
 }
 
 @end
@@ -136,10 +136,10 @@
 
 #pragma mark - Filtering
 
-- (instancetype)filter:(BOOL (^)(id key, id value))block
+- (instancetype)filter:(BOOL (^)(id key, id value))predicate
 {
 	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
-		if ( !block(key, value) ) { [self removeObjectForKey:key]; }
+		if ( !predicate(key, value) ) { [self removeObjectForKey:key]; }
 	}];
 
 	return self;
