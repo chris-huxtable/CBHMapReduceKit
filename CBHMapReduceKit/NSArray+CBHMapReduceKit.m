@@ -150,6 +150,42 @@
 
 @implementation NSMutableArray (CBHMapReduceKit)
 
+#pragma mark - Mapping
+
+- (instancetype)map:(id (^)(id object))transform
+{
+	[self enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+		id mapping = transform(object);
+		if ( object == mapping ) { return; }
+
+		[self replaceObjectAtIndex:idx withObject:mapping];
+	}];
+
+	return self;
+}
+
+- (instancetype)compactMap:(id (^)(id object))transform
+{
+	NSMutableIndexSet *removals = [NSMutableIndexSet indexSet];
+
+	[self enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+		id mapping = transform(object);
+		if ( object == mapping ) { return; }
+
+		if ( mapping == nil )
+		{
+			[removals addIndex:idx];
+			return;
+		}
+
+		[self replaceObjectAtIndex:idx withObject:mapping];
+	}];
+
+	[self removeObjectsAtIndexes:removals];
+	return self;
+}
+
+
 #pragma mark - Filtering
 
 - (instancetype)filter:(BOOL (^)(id object))predicate

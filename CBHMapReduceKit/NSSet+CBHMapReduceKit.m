@@ -143,6 +143,43 @@
 
 @implementation NSMutableSet (CBHMapReduceKit)
 
+
+#pragma mark - Mapping
+
+- (instancetype)map:(id (^)(id object))transform
+{
+	NSMutableArray *additions = [NSMutableArray arrayWithCapacity:[self count]];
+
+	[self enumerateObjectsUsingBlock:^(id object, BOOL *stop) {
+		id mapping = transform(object);
+		if ( object == mapping ) { return; }
+
+		[self removeObject:object];
+		[additions addObject:mapping];
+	}];
+
+	[self addObjectsFromArray:additions];
+	return self;
+}
+
+- (instancetype)compactMap:(id (^)(id object))transform
+{
+	NSMutableArray *additions = [NSMutableArray arrayWithCapacity:[self count]];
+
+	[self enumerateObjectsUsingBlock:^(id object, BOOL *stop) {
+		id mapping = transform(object);
+		if ( object == mapping ) { return; }
+
+		[self removeObject:object];
+		if ( mapping == nil ) { return;}
+		[additions addObject:mapping];
+	}];
+
+	[self addObjectsFromArray:additions];
+	return self;
+}
+
+
 #pragma mark - Filtering
 
 - (instancetype)filter:(BOOL (^)(id object))predicate

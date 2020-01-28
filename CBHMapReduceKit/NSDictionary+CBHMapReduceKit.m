@@ -134,6 +134,73 @@
 
 @implementation NSMutableDictionary (CBHMapReduceKit)
 
+#pragma mark - Mapping
+
+- (instancetype)map:(nonnull id (^)(id key, id value))transform
+{
+	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+		id mapping = transform(key, value);
+		if ( value == mapping ) { return; }
+
+		[self setObject:mapping forKey:key];
+	}];
+
+	return self;
+}
+
+- (instancetype)compactMap:(nullable id (^)(id key, id value))transform
+{
+	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+		id mapping = transform(key, value);
+		if ( value == mapping ) { return; }
+		if ( mapping == nil ) { [self removeObjectForKey:key]; return; }
+
+		[self setObject:mapping forKey:key];
+	}];
+
+	return self;
+}
+
+- (instancetype)rekey:(nonnull id (^)(id key, id value))transform
+{
+	NSMutableDictionary *additions = [NSMutableDictionary dictionaryWithCapacity:[self count]];
+	NSMutableArray *removals = [NSMutableArray arrayWithCapacity:[self count]];
+
+	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+		id mapping = transform(key, value);
+		if ( key == mapping ) { return; }
+
+		[removals addObject:key];
+		[additions setObject:value forKey:mapping];
+	}];
+
+	[self removeObjectsForKeys:removals];
+	[self addEntriesFromDictionary:additions];
+
+	return self;
+}
+
+- (instancetype)compactRekey:(nullable id (^)(id key, id value))transform
+{
+	NSMutableDictionary *additions = [NSMutableDictionary dictionaryWithCapacity:[self count]];
+	NSMutableArray *removals = [NSMutableArray arrayWithCapacity:[self count]];
+
+	[self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+		id mapping = transform(key, value);
+		if ( key == mapping ) { return; }
+		[removals addObject:key];
+
+		if ( mapping == nil ) { return; }
+		[additions setObject:value forKey:mapping];
+	}];
+
+	[self removeObjectsForKeys:removals];
+	[self addEntriesFromDictionary:additions];
+
+	return self;
+}
+
+
 #pragma mark - Filtering
 
 - (instancetype)filter:(BOOL (^)(id key, id value))predicate
