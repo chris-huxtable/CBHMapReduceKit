@@ -114,6 +114,60 @@
 
 @implementation NSMutableDictionaryTests
 
+- (void)testMapping
+{
+	NSMutableDictionary<NSString *, NSNumber *> *mapping = [@{@"a": @1, @"b": @2, @"c": @3} mutableCopy];
+	[mapping map:^NSNumber * _Nonnull(NSString *key, NSNumber *value) {
+		NSInteger intValue = [value integerValue];
+		if ( intValue % 2 == 0 ) { return @(intValue + intValue); }
+		return value;
+	}];
+	NSDictionary<NSString *, NSNumber *> *expected = @{@"a": @1, @"b": @4, @"c": @3};
+
+	XCTAssertEqualObjects(mapping, expected, @"The two dictionaries should be the same.");
+}
+
+- (void)testCompactMapping
+{
+	NSMutableDictionary<NSString *, NSNumber *> *mapping = [@{@"a": @1, @"b": @2, @"c": @3} mutableCopy];
+	[mapping compactMap:^NSNumber *(NSString *key, NSNumber *value) {
+		NSInteger intValue = [value integerValue];
+		if ( intValue % 2 == 0 ) { return @(intValue + intValue); }
+		if ( intValue % 3 == 0 ) { return value; }
+		return nil;
+	}];
+	NSDictionary<NSString *, NSNumber *> *expected = @{@"b": @4, @"c": @3};
+
+	XCTAssertEqualObjects(mapping, expected, @"The two dictionaries should be the same.");
+}
+
+- (void)testRekeying
+{
+	NSMutableDictionary<NSString *, NSNumber *> *mapping = [@{@"a": @1, @"b": @2, @"c": @3} mutableCopy];
+	[mapping rekey:^NSString * _Nonnull(NSString *key, NSNumber *value) {
+		NSInteger intValue = [value integerValue];
+		if ( intValue % 2 == 0 ) { return [key capitalizedString]; }
+		return key;
+	}];
+	NSDictionary<NSString *, NSNumber *> *expected = @{@"a": @1, @"B": @2, @"c": @3};
+
+	XCTAssertEqualObjects(mapping, expected, @"The two dictionaries should be the same.");
+}
+
+- (void)testCompactRekeying
+{
+	NSMutableDictionary<NSString *, NSNumber *> *mapping = [@{@"a": @1, @"b": @2, @"c": @3} mutableCopy];
+	[mapping compactRekey:^NSString *(NSString *key, NSNumber *value) {
+		NSInteger intValue = [value integerValue];
+		if ( intValue % 2 == 0 ) { return [key capitalizedString]; }
+		if ( intValue % 3 == 0 ) { return key; }
+		return nil;
+	}];
+	NSDictionary<NSString *, NSNumber *> *expected = @{@"B": @2, @"c": @3};
+
+	XCTAssertEqualObjects(mapping, expected, @"The two dictionaries should be the same.");
+}
+
 - (void)testFiltering
 {
 	NSMutableDictionary<NSString *, NSNumber *> *dictionary = [@{@"a": @1, @"b": @2, @"c": @3} mutableCopy];

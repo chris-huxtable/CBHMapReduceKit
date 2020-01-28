@@ -138,6 +138,33 @@
 
 @implementation NSMutableOrderedSetTests
 
+- (void)testMapping
+{
+	NSMutableOrderedSet<NSNumber *> *mapping = [NSMutableOrderedSet orderedSetWithArray:@[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10]];
+	[mapping map:^id(NSNumber *object) {
+		NSInteger value = [object integerValue];
+		if ( value % 2 == 0 ) { return @(value + value); }
+		return object;
+	}];
+	NSOrderedSet<NSNumber *> *expected = [NSOrderedSet orderedSetWithArray:@[@1, @2, @3, @4, @5, @12, @7, @16, @9, @20]];
+
+	XCTAssertEqualObjects(mapping, expected, @"The two ordered sets should be the same.");
+}
+
+- (void)testCompactMapping
+{
+	NSMutableOrderedSet<NSNumber *> *mapping = [NSMutableOrderedSet orderedSetWithArray:@[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10]];
+	[mapping compactMap:^id(NSNumber *object) {
+		NSInteger value = [object integerValue];
+		if ( value % 2 == 0 ) { return @(value + value); }
+		if ( value % 3 == 0 ) { return object; }
+		return nil;
+	}];
+	NSOrderedSet<NSNumber *> *expected = [NSOrderedSet orderedSetWithArray:@[@2, @3, @4, @12, @16, @9, @20]];
+
+	XCTAssertEqualObjects(mapping, expected, @"The two ordered sets should be the same.");
+}
+
 - (void)testFiltering
 {
 	NSMutableOrderedSet<NSNumber *> *mapping = [NSMutableOrderedSet orderedSetWithArray:@[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10]];
@@ -146,7 +173,7 @@
 	}];
 	NSOrderedSet<NSNumber *> *expected = [NSOrderedSet orderedSetWithArray:@[@2, @4, @6, @8, @10]];
 
-	XCTAssertEqualObjects(mapping, expected, @"The two sets should be the same.");
+	XCTAssertEqualObjects(mapping, expected, @"The two ordered sets should be the same.");
 }
 
 @end

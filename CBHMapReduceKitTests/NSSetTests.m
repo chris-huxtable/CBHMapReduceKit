@@ -139,6 +139,33 @@
 
 @implementation NSMutableSetTests
 
+- (void)testMapping
+{
+	NSMutableSet<NSNumber *> *mapping = [NSMutableSet setWithArray:@[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10]];
+	[mapping map:^id(NSNumber *object) {
+		NSInteger value = [object integerValue];
+		if ( value % 2 == 0 ) { return @(value + value); }
+		return object;
+	}];
+	NSSet<NSNumber *> *expected = [NSSet setWithArray:@[@1, @4, @3, @8, @5, @12, @7, @16, @9, @20]];
+
+	XCTAssertEqualObjects(mapping, expected, @"The two arrays should be the same.");
+}
+
+- (void)testCompactMapping
+{
+	NSMutableSet<NSNumber *> *mapping = [NSMutableSet setWithArray:@[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10]];
+	[mapping compactMap:^id(NSNumber *object) {
+		NSInteger value = [object integerValue];
+		if ( value % 2 == 0 ) { return @(value + value); }
+		if ( value % 3 == 0 ) { return object; }
+		return nil;
+	}];
+	NSSet<NSNumber *> *expected = [NSSet setWithArray:@[@4, @3, @8, @12, @16, @9, @20]];
+
+	XCTAssertEqualObjects(mapping, expected, @"The two arrays should be the same.");
+}
+
 - (void)testFiltering
 {
 	NSMutableSet<NSNumber *> *mapping = [NSMutableSet setWithArray:@[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10]];
