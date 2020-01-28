@@ -88,7 +88,8 @@ NSNumber *reduction = [array initial:@0 reduce:^NSNumber *(NSNumber *memo, NSNum
 ```
 
 #### Mutating:
-```objective-c- (instancetype)filter:(BOOL (^)(ElementType object))predicate;
+```objective-c
+- (instancetype)filter:(BOOL (^)(ElementType object))predicate;
 ```
 
 ### Reduce:
