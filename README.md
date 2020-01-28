@@ -45,43 +45,51 @@ NSNumber *reduction = [array initial:@0 reduce:^NSNumber *(NSNumber *memo, NSNum
 
 #### To `NSArray`:
 ```objective-c
-- (NSArray<id> *)arrayByMapping:(nullable id (^)(ObjectType object))block;
-- (NSMutableArray<id> *)mutableArrayByMapping:(nullable id (^)(ObjectType object))block;
+- (NSArray<id> *)arrayByMapping:(nullable id (^)(ElementType object))transform;
+- (NSMutableArray<id> *)mutableArrayByMapping:(nullable id (^)(ElementType object))transform;
 ```
 
 #### To `NSSet` :
 ```objective-c
-- (NSSet<id> *)setByMapping:(nullable id (^)(ObjectType object))block;
-- (NSMutableSet<id> *)mutableSetByMapping:(nullable id (^)(ObjectType object))block;
+- (NSSet<id> *)setByMapping:(nullable id (^)(ElementType object))transform;
+- (NSMutableSet<id> *)mutableSetByMapping:(nullable id (^)(ElementType object))transform;
 ```
 
 #### To `NSOrderedSet`:
 ```objective-c
-- (NSOrderedSet<id> *)orderedSetByMapping:(nullable id (^)(ObjectType object))block;
-- (NSMutableOrderedSet<id> *)mutableOrderedSetByMapping:(nullable id (^)(ObjectType object))block;
+- (NSOrderedSet<id> *)orderedSetByMapping:(nullable id (^)(ElementType object))transform;
+- (NSMutableOrderedSet<id> *)mutableOrderedSetByMapping:(nullable id (^)(ElementType object))transform;
 ```
 
+#### Mutating:
+```objective-c
+- (instancetype)map:(ElementType (^)(ElementType object))transform;
+- (instancetype)compactMap:(nullable ElementType (^)(ElementType object))transform;
+```
 
 ### Filtering:
 
 #### To `NSArray`:
 ```objective-c
-- (NSArray<ObjectType> *)arrayByFiltering:(BOOL (^)(ObjectType object))block;
-- (NSMutableArray<ObjectType> *)mutableArrayByFiltering:(BOOL (^)(ObjectType object))block;
+- (NSArray<ObjectType> *)arrayByFiltering:(BOOL (^)(ElementType object))predicate;
+- (NSMutableArray<ObjectType> *)mutableArrayByFiltering:(BOOL (^)(ElementType object))predicate;
 ```
 
 #### To `NSSet`:
 ```objective-c
-- (NSSet<ObjectType> *)setByFiltering:(BOOL (^)(ObjectType object))block;
-- (NSMutableSet<ObjectType> *)mutableSetByFiltering:(BOOL (^)(ObjectType object))block;
+- (NSSet<ObjectType> *)setByFiltering:(BOOL (^)(ElementType object))predicate;
+- (NSMutableSet<ObjectType> *)mutableSetByFiltering:(BOOL (^)(ElementType object))predicate;
 ```
 
 #### To `NSOrderedSet`:
 ```objective-c
-- (NSOrderedSet<ObjectType> *)orderedSetByFiltering:(BOOL (^)(ObjectType object))block;
-- (NSMutableOrderedSet<ObjectType> *)mutableOrderedSetByFiltering:(BOOL (^)(ObjectType object))block;
+- (NSOrderedSet<ObjectType> *)orderedSetByFiltering:(BOOL (^)(ElementType object))predicate;
+- (NSMutableOrderedSet<ObjectType> *)mutableOrderedSetByFiltering:(BOOL (^)(ElementType object))predicate;
 ```
 
+#### Mutating:
+```objective-c- (instancetype)filter:(BOOL (^)(ElementType object))predicate;
+```
 
 ### Reduce:
 
