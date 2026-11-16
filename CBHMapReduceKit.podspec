@@ -12,7 +12,7 @@ Pod::Spec.new do |spec|
   spec.author                 = { 'Chris Huxtable' => 'chris@huxtable.ca' }
   spec.social_media_url       = 'https://twitter.com/@Chris_Huxtable'
 
-  spec.osx.deployment_target  = '10.11'
+  spec.osx.deployment_target  = '12.0'
 
   spec.source                 = { :git => 'https://github.com/chris-huxtable/CBHMapReduceKit.git', :tag => "v#{spec.version}" }
 
