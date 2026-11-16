@@ -59,7 +59,6 @@
 		83E09E6523975B90003B95B9 /* NSEnumerator+CBHMapReduceKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSEnumerator+CBHMapReduceKit.h"; sourceTree = "<group>"; };
 		83E09E6623975B90003B95B9 /* NSEnumerator+CBHMapReduceKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSEnumerator+CBHMapReduceKit.m"; sourceTree = "<group>"; };
 		83E09E6923976395003B95B9 /* NSEnumeratorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSEnumeratorTests.m; sourceTree = "<group>"; };
-		83E09E6B2397FDBC003B95B9 /* CBHMapReduceKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CBHMapReduceKit.podspec; sourceTree = "<group>"; };
 		83E09E6C2397FDBC003B95B9 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		83E09E6D2397FDBC003B95B9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,7 +87,6 @@
 			children = (
 				83E09E6D2397FDBC003B95B9 /* README.md */,
 				83E09E6C2397FDBC003B95B9 /* LICENSE */,
-				83E09E6B2397FDBC003B95B9 /* CBHMapReduceKit.podspec */,
 				83E09E332396C7A9003B95B9 /* CBHMapReduceKit */,
 				83E09E3E2396C7A9003B95B9 /* CBHMapReduceKitTests */,
 				83E09E322396C7A9003B95B9 /* Products */,

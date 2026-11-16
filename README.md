@@ -1,7 +1,6 @@
 # CBHMapReduceKit
 
 [![release](https://img.shields.io/github/release/chris-huxtable/CBHMapReduceKit.svg)](https://github.com/chris-huxtable/CBHMapReduceKit/releases)
-[![pod](https://img.shields.io/cocoapods/v/CBHMapReduceKit.svg)](https://cocoapods.org/pods/CBHMapReduceKit)
 [![licence](https://img.shields.io/badge/licence-ISC-lightgrey.svg?cacheSeconds=2592000)](https://github.com/chris-huxtable/CBHMapReduceKit/blob/master/LICENSE)
 [![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg?cacheSeconds=2592000)](https://github.com/chris-huxtable/CBHMapReduceKit)
 
